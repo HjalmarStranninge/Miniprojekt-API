@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Miniprojekt_API.Data;
+using Miniprojekt_API.Services;
+
 namespace Miniprojekt_API
 {
     public class Program
@@ -5,9 +9,14 @@ namespace Miniprojekt_API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Creating context and scoping IDbHelper to the correct class.
+            string connectionString = builder.Configuration.GetConnectionString("ProfileContext");
+            builder.Services.AddDbContext<ProfileContext>(opt => opt.UseSqlServer(connectionString));
+            builder.Services.AddScoped<IDbHelper, DbHelper>();
             var app = builder.Build();
 
-            app.MapGet("/", () => "Hello World!");
+            app.MapGet("/persons", ApiHandler.ListPersons);
 
             app.Run();
         }
