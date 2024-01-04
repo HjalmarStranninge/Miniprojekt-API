@@ -1,4 +1,4 @@
-﻿namespace Miniprojekt_API
+﻿namespace Miniprojekt_API.Services
 {
     public static class Utility
     {

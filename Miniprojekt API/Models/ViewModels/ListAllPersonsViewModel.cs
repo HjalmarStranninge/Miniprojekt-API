@@ -1,6 +1,6 @@
 ﻿namespace Miniprojekt_API.Models.ViewModels
 {
-    public class ListAllPersonsViewModel
+    public class ListAllPeopleViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

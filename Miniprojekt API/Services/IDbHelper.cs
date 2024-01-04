@@ -10,7 +10,9 @@ namespace Miniprojekt_API.Services
 {
     public interface IDbHelper
     {
-        List<ListAllPersonsViewModel> GetAllPeople();
+        List<ListAllPeopleViewModel> GetAllPeople();
+        List<ListPersonsInterestsViewModel> GetPersonsInterests(int personId);
+        List<ListPersonsLinksViewModel> GetPersonsLinks(int personId);
         public IResult ConnectInterest(int personId, int interestId);
     }
 
@@ -23,10 +25,10 @@ namespace Miniprojekt_API.Services
             _context = context;
         }
 
-        // Retrieves a list of persons from the database and maps them to a ViewModel for presentation.
-        public List<ListAllPersonsViewModel> GetAllPeople()
+        // Retrieves a list of people from the database and maps them to a ViewModel for presentation.
+        public List<ListAllPeopleViewModel> GetAllPeople()
         {
-            List<ListAllPersonsViewModel> persons = _context.People.Select(p => new ListAllPersonsViewModel 
+            List<ListAllPeopleViewModel> persons = _context.People.Select(p => new ListAllPeopleViewModel 
             { 
                 FirstName = p.FirstName, 
                 LastName = p.LastName,
@@ -35,6 +37,43 @@ namespace Miniprojekt_API.Services
                 .ToList();
             return persons;
         }
+
+        // Returns a viewmodel list of all of a specific persons interests.
+        public List<ListPersonsInterestsViewModel> GetPersonsInterests(int personId)
+        {
+            var person =
+                _context.People
+            .Where(p => p.Id == personId)
+            .Include(p => p.Interests)
+            .SingleOrDefault();
+
+            List<ListPersonsInterestsViewModel> interests = person.Interests.Select(i => new ListPersonsInterestsViewModel
+            {
+                Title = i.Title,
+                Description = i.Description
+            })
+                .ToList();
+            return interests;
+        }
+
+        // Returns a viewmodel list of all of a specific persons links.
+        public List<ListPersonsLinksViewModel> GetPersonsLinks(int personId)
+        {
+            var person =
+                _context.People
+            .Where(p => p.Id == personId)
+            .Include(p => p.Links)
+            .SingleOrDefault();
+
+            List<ListPersonsLinksViewModel> links = person.Links.Select(l => new ListPersonsLinksViewModel
+            {
+                Url = l.Url
+            })
+                .ToList();
+            return links;
+        }
+
+       
 
         // Adds new interest to database and links it to a person.
         public IResult ConnectInterest(int personId, int interestId)
