@@ -17,11 +17,14 @@ namespace Miniprojekt_API
 
             var app = builder.Build();
 
+            // GET-endpoints
             app.MapGet("/people", ApiHandler.ListPeople);
             app.MapGet("/people/{personId}/interests", ApiHandler.ListPersonsInterests);
             app.MapGet("/people/{personId}/links", ApiHandler.ListPersonsLinks);
 
+            // POST-endpoints
             app.MapPost("/people/{personId}/interests/{interestId}/connect", ApiHandler.ConnectInterest);
+            app.MapPost("/people/{personId}/interests/{interestId}/addlink", ApiHandler.AddNewLink);
 
             app.Run();
         }

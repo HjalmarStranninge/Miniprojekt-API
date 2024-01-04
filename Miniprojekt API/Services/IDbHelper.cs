@@ -123,6 +123,7 @@ namespace Miniprojekt_API.Services
             var interest =
                 _context.Interests
             .Where(i => i.Id == interestId)
+            .Include(i => i.Links)
             .SingleOrDefault();
 
             if (!Utility.DoesEntityExist(interest))
@@ -133,7 +134,7 @@ namespace Miniprojekt_API.Services
             var person =
                 _context.People
             .Where(p => p.Id == personId)
-            .Include(p => p.Interests)
+            .Include(p => p.Links)
             .SingleOrDefault();
 
             if (!Utility.DoesEntityExist(person))
@@ -141,15 +142,13 @@ namespace Miniprojekt_API.Services
                 return Results.BadRequest($"No {nameof(person)} with ID {personId} exists.");
             }
 
-            person.Links.Add(new Link()
+            var newLink = new Link
             {
                 Url = link.Url
-            });
+            };
 
-            interest.Links.Add(new Link()
-            {
-                Url = link.Url
-            });
+            person.Links.Add(newLink);
+            interest.Links.Add(newLink);
 
             _context.SaveChanges();
             return Results.StatusCode((int)HttpStatusCode.Created);
