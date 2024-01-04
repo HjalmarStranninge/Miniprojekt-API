@@ -51,6 +51,7 @@ namespace Miniprojekt_API.Services
             .Include(p => p.Interests)
             .SingleOrDefault();
 
+
             List<ListPersonsInterestsViewModel> interests = person.Interests.Select(i => new ListPersonsInterestsViewModel
             {
                 Title = i.Title,
