@@ -14,9 +14,11 @@ namespace Miniprojekt_API
             string connectionString = builder.Configuration.GetConnectionString("ProfileContext");
             builder.Services.AddDbContext<ProfileContext>(opt => opt.UseSqlServer(connectionString));
             builder.Services.AddScoped<IDbHelper, DbHelper>();
+
             var app = builder.Build();
 
-            app.MapGet("/persons", ApiHandler.ListPersons);
+            app.MapGet("/people", ApiHandler.ListPeople);
+            app.MapPost("/people/{personId}/interest/{interestId}/connect", ApiHandler.ConnectInterest);
 
             app.Run();
         }
