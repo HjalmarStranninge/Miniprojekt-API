@@ -5,6 +5,7 @@ using Miniprojekt_API.Services;
 
 namespace Miniprojekt_API
 {
+    // Class handling API interactions.
     public static class ApiHandler
     {      
         // Returns a list of all people in Json format.
@@ -30,9 +31,17 @@ namespace Miniprojekt_API
             return Results.Json(links);
         }
 
+        // Connects a person to an interest.
         public static IResult ConnectInterest(IDbHelper dbHelper, int personid, int interestId)
         {
             var result = dbHelper.ConnectInterest(personid, interestId);
+            return result;
+        }
+
+        // Adds a new link and connects it to a person and an interest.
+        public static IResult AddNewLink(IDbHelper dbHelper, int personid, int interestId, LinkDTO link)
+        {
+            var result = dbHelper.SaveLinkToDatabase(personid, interestId, link);
             return result;
         }
     }
